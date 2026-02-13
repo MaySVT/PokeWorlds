@@ -24,6 +24,8 @@ from poke_worlds.interface.environment import Environment, DummyEnvironment
 from poke_worlds.interface.pokemon.environments import (
     PokemonEnvironment,
     PokemonRedChooseCharmanderEnvironment,
+    PokemonRedChooseCharmanderEasyEnvironment,
+    PokemonRedChooseCharmanderHardEnvironment,
     PokemonOCREnvironment,
     PokemonRedExploreStartingSceneEnvironment,
     PokemonTestEnvironment,
@@ -41,6 +43,8 @@ AVAILABLE_ENVIRONMENTS: Dict[str, Dict[str, Type[Environment]]] = {
         "default": PokemonOCREnvironment,
         "basic": PokemonEnvironment,
         "charmander": PokemonRedChooseCharmanderEnvironment,
+        "charmander_easy": PokemonRedChooseCharmanderEasyEnvironment,
+        "charmander_hard": PokemonRedChooseCharmanderHardEnvironment,
         "starter_explore": PokemonRedExploreStartingSceneEnvironment,
         "test": PokemonTestEnvironment,
     },
