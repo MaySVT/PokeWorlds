@@ -45,6 +45,7 @@ class RandomPatchProjection:
             start,
             end,
             bias=False,
+            dtype=torch.bfloat16,
             device="cuda" if torch.cuda.is_available() else "cpu",
         )
         nn.init.kaiming_normal_(step1.weight, generator=my_local_rng)
@@ -70,11 +71,13 @@ class RandomPatchProjection:
             with torch.no_grad():
                 cell_embedding = self.random_projection(cell_image_tensor)
                 # normalize
-                cell_embedding = cell_embedding / (cell_embedding.norm()+1e-6)
+                cell_embedding = cell_embedding / (cell_embedding.norm() + 1e-6)
             cell_embeddings.append(cell_embedding)
-        #cell_embeddings_tensor = torch.stack(cell_embeddings, dim=0)
-        #image_embedding = torch.mean(cell_embeddings_tensor, dim=0) # shape (cell_reduction_dimension,)
-        image_embedding = torch.cat(cell_embeddings, dim=0) # shape (cell_reduction_dimension*90,)
+        # cell_embeddings_tensor = torch.stack(cell_embeddings, dim=0)
+        # image_embedding = torch.mean(cell_embeddings_tensor, dim=0) # shape (cell_reduction_dimension,)
+        image_embedding = torch.cat(
+            cell_embeddings, dim=0
+        )  # shape (cell_reduction_dimension*90,)
         return image_embedding
 
     def project(self, items: List[Union[np.ndarray, Image]]) -> torch.Tensor:
