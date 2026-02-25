@@ -17,114 +17,51 @@ from poke_worlds.emulation.registry import (
     AVAILABLE_GAMES,
     infer_game,
     get_available_init_states,
+    _merge_into_dict,
 )
 from poke_worlds.interface.controller import Controller, _ALWAYS_VALID_CONTROLLERS
 from poke_worlds.interface.environment import Environment, DummyEnvironment
-from poke_worlds.interface.pokemon.environments import (
-    PokemonEnvironment,
-    PokemonRedChooseCharmanderEnvironment,
-    PokemonRedChooseCharmanderEasyEnvironment,
-    PokemonRedChooseCharmanderHardEnvironment,
-    PokemonOCREnvironment,
-    PokemonRedExploreStartingSceneEnvironment,
-    PokemonTestEnvironment,
-    PokemonTrainEnvironment,
-)
-from poke_worlds.interface.pokemon.controllers import PokemonStateWiseController
-from poke_worlds.interface.legend_of_zelda.controllers import (
-    LegendOfZeldaStateWiseController,
-)
+
+from poke_worlds.interface.pokemon import registry as pokemon_registry
+from poke_worlds.interface.legend_of_zelda import registry as zelda_registry
+from poke_worlds.interface.sword_of_hope import registry as sword_of_hope_registry
+from poke_worlds.interface.deja_vu import registry as deja_vu_registry
+from poke_worlds.interface.harvest_moon import registry as harvest_moon_registry
 
 
 _project_parameters = load_parameters()
 
-AVAILABLE_ENVIRONMENTS: Dict[str, Dict[str, Type[Environment]]] = {
-    "pokemon_red": {
-        "dummy": DummyEnvironment,
-        "default": PokemonOCREnvironment,
-        "basic": PokemonEnvironment,
-        "charmander": PokemonRedChooseCharmanderEnvironment,
-        "charmander_easy": PokemonRedChooseCharmanderEasyEnvironment,
-        "charmander_hard": PokemonRedChooseCharmanderHardEnvironment,
-        "starter_explore": PokemonRedExploreStartingSceneEnvironment,
-        "train": PokemonTrainEnvironment,
-        "test": PokemonTestEnvironment,
-    },
-    "pokemon_brown": {
-        "default": PokemonOCREnvironment,
-        "basic": PokemonEnvironment,
-        "train": PokemonTrainEnvironment,
-        "test": PokemonTestEnvironment,
-    },
-    "pokemon_starbeasts": {
-        "default": PokemonOCREnvironment,
-        "basic": PokemonEnvironment,
-        "train": PokemonTrainEnvironment,
-        "test": PokemonTestEnvironment,
-    },
-    "pokemon_crystal": {
-        "default": PokemonOCREnvironment,
-        "basic": PokemonEnvironment,
-        "train": PokemonTrainEnvironment,
-        "test": PokemonTestEnvironment,
-    },
-    "pokemon_prism": {
-        "default": PokemonOCREnvironment,
-        "basic": PokemonEnvironment,
-        "train": PokemonTrainEnvironment,
-        "test": PokemonTestEnvironment,
-    },
-    "pokemon_fools_gold": {
-        "default": PokemonOCREnvironment,
-        "basic": PokemonEnvironment,
-        "train": PokemonTrainEnvironment,
-        "test": PokemonTestEnvironment,
-    },
-    "legend_of_zelda_links_awakening": {
-        "dummy": DummyEnvironment,
-        "default": DummyEnvironment,
-    },
+_game_registries = [
+    pokemon_registry,
+    zelda_registry,
+    sword_of_hope_registry,
+    deja_vu_registry,
+    harvest_moon_registry,
+]
 
-    "legend_of_zelda_the_oracle_of_ages": {
-        "dummy": DummyEnvironment,
-        "default": DummyEnvironment,
-    },
+AVAILABLE_ENVIRONMENTS: Dict[str, Dict[str, Type[Environment]]] = {}
+""" Mapping of game names to their available Environment classes with string identifiers. Each game should have a 'default' environment variant. """
 
-    "legend_of_zelda_the_oracle_of_seasons": {
-        "dummy": DummyEnvironment,
-        "default": DummyEnvironment,
-    },
-}
 
-AVAILABLE_CONTROLLERS: Dict[str, Dict[str, Type[Controller]]] = {
-    "pokemon_red": {
-        "state_wise": PokemonStateWiseController,
-    },
-    "pokemon_brown": {
-        "state_wise": PokemonStateWiseController,
-    },
-    "pokemon_crystal": {
-        "state_wise": PokemonStateWiseController,
-    },
-    "pokemon_starbeasts": {
-        "state_wise": PokemonStateWiseController,
-    },
-    "pokemon_prism": {
-        "state_wise": PokemonStateWiseController,
-    },
-    "pokemon_fools_gold": {
-        "state_wise": PokemonStateWiseController,
-    },
-    "legend_of_zelda_links_awakening": {
-        "state_wise": LegendOfZeldaStateWiseController,
-    },
-    "legend_of_zelda_the_oracle_of_ages": {
-        "state_wise": LegendOfZeldaStateWiseController,
-    },
-    "legend_of_zelda_the_oracle_of_seasons": {
-        "state_wise": LegendOfZeldaStateWiseController,
-    },
-}
+AVAILABLE_CONTROLLERS: Dict[str, Dict[str, Type[Controller]]] = {}
+""" Mapping of game names to their available Controller classes with string identifiers. The default controller for every game is the LowLevelController. """
+
+
+for registry in _game_registries:
+    if hasattr(registry, "AVAILABLE_ENVIRONMENTS"):
+        _merge_into_dict(AVAILABLE_ENVIRONMENTS, registry.AVAILABLE_ENVIRONMENTS)
+    else:
+        log_error(
+            f"Registry module '{registry.__name__}' does not have an AVAILABLE_ENVIRONMENTS dictionary. You must create one, even if it is empty.",
+            _project_parameters,
+        )
+    if hasattr(registry, "AVAILABLE_CONTROLLERS"):
+        _merge_into_dict(AVAILABLE_CONTROLLERS, registry.AVAILABLE_CONTROLLERS)
+    else:
+        log_error(
+            f"Registry module '{registry.__name__}' does not have an AVAILABLE_CONTROLLERS dictionary. You must create one, even if it is empty.",
+            _project_parameters,
+        )
 
 for game in AVAILABLE_GAMES:
     if game not in AVAILABLE_ENVIRONMENTS:
@@ -133,26 +70,22 @@ for game in AVAILABLE_GAMES:
             _project_parameters,
         )
     if game not in AVAILABLE_CONTROLLERS:
-        log_warn(
-            f"No controllers registered for game variant '{game}'. Will error out if you try to get a controller for this game variant.",
-            _project_parameters,
-        )
-    else:
-        for valid_controller_key in _ALWAYS_VALID_CONTROLLERS:
-            if valid_controller_key in AVAILABLE_CONTROLLERS[game]:
-                log_error(
-                    f"Controller key '{valid_controller_key}' for game variant '{game}' is reserved for always valid controllers. Do not add a controller with this key in the registry.",
-                    _project_parameters,
-                )
-            AVAILABLE_CONTROLLERS[game][valid_controller_key] = (
-                _ALWAYS_VALID_CONTROLLERS[valid_controller_key]
+        AVAILABLE_CONTROLLERS[game] = {}
+    for valid_controller_key in _ALWAYS_VALID_CONTROLLERS:
+        if valid_controller_key in AVAILABLE_CONTROLLERS[game]:
+            log_error(
+                f"Controller key '{valid_controller_key}' for game variant '{game}' is reserved for always valid controllers. Do not add a controller with this key in the registry.",
+                _project_parameters,
             )
+        AVAILABLE_CONTROLLERS[game][valid_controller_key] = _ALWAYS_VALID_CONTROLLERS[
+            valid_controller_key
+        ]
 
 
 def get_controller(
     game: str,
     *,
-    controller_variant: Union[str, Type[Controller], Controller],
+    controller_variant: Union[str, Type[Controller], Controller] = "low_level",
     parameters: dict = None,
 ) -> Type[Controller]:
     """
@@ -197,7 +130,7 @@ def get_environment(
     game: str,
     *,
     environment_variant: str,
-    controller_variant: Union[str, Type[Controller], Controller],
+    controller_variant: Union[str, Type[Controller], Controller] = "low_level",
     parameters: dict = None,
     **emulator_kwargs,
 ) -> Environment:
@@ -238,7 +171,7 @@ def get_environment(
 
 def get_test_environment(
     row: Mapping,
-    controller_variant: Union[str, Type[Controller], Controller],
+    controller_variant: Union[str, Type[Controller], Controller] = "low_level",
     parameters: dict = None,
     **emulator_kwargs,
 ) -> Environment:
@@ -270,7 +203,7 @@ def get_test_environment(
 
 def get_training_environments_kwargs(
     row: Mapping,
-    controller_variant: Union[str, Type[Controller], Controller],
+    controller_variant: Union[str, Type[Controller], Controller] = "low_level",
     parameters: dict = None,
     **emulator_kwargs,
 ) -> List[Dict[str, str]]:
@@ -280,7 +213,7 @@ def get_training_environments_kwargs(
 
     :param row: A row from the benchmark tasks / questions DataFrame.
     :type row: Mapping
-    :param controller_variant: Description
+    :param controller_variant: The variant of the controller to create or the Controller class itself or an instance of Controller.
     :type controller_variant: Union[str, Type[Controller], Controller]
     :param parameters: Additional parameters for error logging.
     :type parameters: dict, optional
@@ -320,7 +253,7 @@ def get_training_environments_kwargs(
 
 def get_shifted_environments_kwargs(
     row: Mapping,
-    controller_variant: Union[str, Type[Controller], Controller],
+    controller_variant: Union[str, Type[Controller], Controller] = "low_level",
     parameters: dict = None,
     **emulator_kwargs,
 ) -> List[Dict[str, str]]:
@@ -330,7 +263,8 @@ def get_shifted_environments_kwargs(
 
     :param row: A row from the benchmark tasks / questions DataFrame.
     :type row: Mapping
-    :param controller_variant: Description
+    :param controller_variant: The variant of the controller to create or the Controller class itself or an instance of Controller.
+
     :type controller_variant: Union[str, Type[Controller], Controller]
     :param parameters: Additional parameters for error logging.
     :type parameters: dict, optional
