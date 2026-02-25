@@ -3,7 +3,7 @@ name: Quick Tests
 on:
   push:
     branches:
-      - '*'
+      - main
     # Alternative: only build for tags.
     # tags:
     #   - '*'
