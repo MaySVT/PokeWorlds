@@ -167,39 +167,3 @@ class PokemonRedChooseCharmanderHardEnvironment(PokemonRedChooseCharmanderEnviro
         )
         emulator_kwargs["init_state"] = "test_starter_hard"
         return emulator_kwargs
-
-
-class PokemonRedExploreStartingSceneEnvironment(PokemonRedStarterChoiceEnvironment):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        from poke_worlds.execution.retrieval import Index
-
-        self._visual_index = Index(modality="image")
-
-    def determine_reward(
-        self,
-        start_state,
-        *,
-        action=None,
-        action_kwargs=None,
-        transition_states=None,
-        action_success=None,
-    ) -> float:
-        """
-        Reward the agent for seeing a screen it has not seen before.
-        """
-        # take the current frame, embed it, compare to index, and reward based on novelty
-        screen = self._emulator.get_current_frame()  # avoids the grid
-        similarity_scores = self._visual_index.add_compare(screen)
-        if similarity_scores is None:
-            return 0.0  # first frame
-        novelty_score = 1.0 - float((similarity_scores.max()).item())
-        return novelty_score
-
-    def reset(
-        self, *, seed: Optional[int] = None, options: Optional[dict] = None
-    ) -> Tuple[Any, Dict]:
-        from poke_worlds.execution.retrieval import Index
-
-        self._visual_index = Index(modality="image")
-        return super().reset(seed=seed, options=options)
