@@ -203,3 +203,5 @@ tmp*
 .claude/
 CLAUDE.md
 README_pipeline.md
+
+quick_tests.sh
