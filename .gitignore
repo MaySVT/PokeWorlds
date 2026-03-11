@@ -197,3 +197,4 @@ tmp.py
 */*/*/*.DS_Store
 tmp*
 *.DS_Store
+quick_tests.sh
