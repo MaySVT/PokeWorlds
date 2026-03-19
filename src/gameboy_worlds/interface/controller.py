@@ -372,7 +372,7 @@ class LowLevelController(Controller):
 
     def get_action_strings(self):
         msg = f"""
-        A, B, S for button. L, R, U, D for arrow keys. (Start button is S)
+        Arrow Keys (U for up, D for down, L for left, R for right), A and B for buttons, S for start.
         """
         return {LowLevelAction: msg}
 

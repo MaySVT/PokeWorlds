@@ -92,7 +92,9 @@ def load_parameters(parameters: dict = None) -> dict:
         error("Please create private_vars.yaml in the configs directory")
     for file in config_files:
         if file.endswith(".yaml"):
-            configs = load_yaml(os.path.join(project_root, "configs", file))
+            configs = None
+            while configs is None:
+                configs = load_yaml(os.path.join(project_root, "configs", file))
             for key in configs:
                 if key in params:
                     error(
