@@ -5,6 +5,8 @@ from gameboy_worlds.emulation.tracker import (
     RegionMatchTerminationOnlyMetric,
     TerminationMetric,
     RegionMatchTerminationMetric,
+    RegionMatchSubGoal,
+    AnyRegionMatchSubGoal,
 )
 from gameboy_worlds.emulation.pokemon.base_metrics import (
     PokemonExitBattleTruncationMetric,
@@ -17,6 +19,18 @@ class PokemonCenterTerminateMetric(RegionMatchTerminationOnlyMetric):
 
     _TERMINATION_NAMED_REGION = "screen_bottom_half"
     _TERMINATION_TARGET_NAME = "viridian_pokemon_center_entrance"
+
+
+class OutsideViridianCenterSubgoal(AnyRegionMatchSubGoal):
+    NAME = "outside_viridian_center"
+    _NAMED_REGIONS = [
+        "screen_middle",
+        "screen_middle",
+    ]
+    _TARGET_NAMES = [
+        "outside_viridian_center_from_left",
+        "outside_viridian_center_from_right",
+    ]
 
 
 class MtMoonTerminateMetric(RegionMatchTerminationOnlyMetric):

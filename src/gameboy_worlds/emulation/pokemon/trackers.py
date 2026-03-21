@@ -6,6 +6,7 @@ from gameboy_worlds.emulation.pokemon.base_metrics import (
 )
 from gameboy_worlds.emulation.pokemon.test_metrics import (
     PokemonCenterTerminateMetric,
+    OutsideViridianCenterSubgoal,
     MtMoonTerminateMetric,
     SpeakToBillCompleteTerminateMetric,
     PickupPokeballTerminateMetric,
@@ -29,6 +30,7 @@ from gameboy_worlds.emulation.tracker import (
     StateTracker,
     TestTrackerMixin,
     DummySubGoalMetric,
+    make_subgoal_metric_class,
 )
 from gameboy_worlds.emulation.pokemon.parsers import (
     AgentState,
@@ -96,7 +98,7 @@ class PokemonRedCenterTestTracker(PokemonTestTracker):
     """
 
     TERMINATION_TRUNCATION_METRIC = PokemonCenterTerminateMetric
-    SUBGOAL_METRIC = DummySubGoalMetric
+    SUBGOAL_METRIC = make_subgoal_metric_class([OutsideViridianCenterSubgoal])
 
 
 class PokemonRedMtMoonTestTracker(PokemonTestTracker):
