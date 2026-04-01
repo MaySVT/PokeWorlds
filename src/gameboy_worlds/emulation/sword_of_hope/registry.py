@@ -8,6 +8,7 @@ from gameboy_worlds.emulation.sword_of_hope.parsers import (
 )
 from gameboy_worlds.emulation.sword_of_hope.trackers import (
     SwordOfHope1MillRoomTestTracker,
+    SwordOfHope1ShamanRoomTestTracker,
 )
 
 GAME_TO_GB_NAME = {
@@ -31,6 +32,7 @@ AVAILABLE_STATE_TRACKERS: Dict[str, Dict[str, Type[StateTracker]]] = {
     "sword_of_hope_1": {
         "default": StateTracker,
         "mill_room_test": SwordOfHope1MillRoomTestTracker,
+        "shaman_room_test": SwordOfHope1ShamanRoomTestTracker,
     },
     "sword_of_hope_2": {"default": StateTracker},
 }

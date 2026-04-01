@@ -92,6 +92,10 @@ class SwordOfHope1Parser(_BaseSwordOfHopeParser):
     COMMON_MULTI_TARGETS = {
         "room_label": [
             "mill_room",
+            "oldman_house",
+            "in_forest",
+            "shaman_house",
+            "shaman_room",
         ],
     }
 
