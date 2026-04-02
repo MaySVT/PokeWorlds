@@ -444,6 +444,26 @@ class RegionMatchSubGoal(SubGoal, ABC):
         return matches
 
 
+class SingleRegionMatchSubGoal(SubGoal, ABC):
+    """
+    A subgoal that is completed if a specific single region matches its target.
+    """
+
+    NAME = "placeholder"
+    _NAMED_REGION: str = None
+
+    def __init__(self):
+        super().__init__()
+        if self._NAMED_REGION is None:
+            log_error(
+                "Subclasses of SingleRegionMatchSubGoal must set _NAMED_REGION class variable.",
+            )
+
+    def _check_completed(self, frame, parser):
+        matches = parser.named_region_matches_target(frame, self._NAMED_REGION)
+        return matches
+
+
 class AnyRegionMatchSubGoal(SubGoal, ABC):
     """
     A subgoal that is completed if any of a list of specific regions matches their targets.
@@ -470,6 +490,29 @@ class AnyRegionMatchSubGoal(SubGoal, ABC):
             matches = parser.named_region_matches_multi_target(
                 frame, named_region, target_name
             )
+            if matches:
+                return True
+        return False
+
+
+class AnySingleRegionMatchSubGoal(SubGoal, ABC):
+    """
+    A subgoal that is completed if any of a list of specific regions matches their targets, where each region only has one target.
+    """
+
+    NAME = "placeholder"
+    _NAMED_REGIONS: List[str] = None
+
+    def __init__(self):
+        super().__init__()
+        if self._NAMED_REGIONS is None or len(self._NAMED_REGIONS) == 0:
+            log_error(
+                "Subclasses of AnySingleRegionMatchSubGoal must set _NAMED_REGIONS class variable, and it must be non empty.",
+            )
+
+    def _check_completed(self, frame: np.ndarray, parser: StateParser) -> bool:
+        for named_region in self._NAMED_REGIONS:
+            matches = parser.named_region_matches_target(frame, named_region)
             if matches:
                 return True
         return False
