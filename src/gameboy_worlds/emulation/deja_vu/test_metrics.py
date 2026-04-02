@@ -54,11 +54,17 @@ class OpenWalletTerminationMetric(RegionMatchTerminationOnlyMetric):
     _TERMINATION_NAMED_REGION = "dialogue_box_area"
     _TERMINATION_TARGET_NAME = "opened_wallet"
 
-# class ClosedPocketTerminationMetric(RegionMatchTerminationOnlyMetric):
-#     REQUIRED_PARSER = DejaVu1StateParser
+class ClosedPocketTerminationMetric(RegionMatchTerminationOnlyMetric):
+    REQUIRED_PARSER = DejaVu1StateParser
 
-#     _TERMINATION_NAMED_REGION = "dialogue_box_area"
-#     _TERMINATION_TARGET_NAME = "closed_pocket"
+    _TERMINATION_NAMED_REGION = "dialogue_box_area"
+    _TERMINATION_TARGET_NAME = "closed_pocket"
+
+class ClosedWalletTerminationMetric(RegionMatchTerminationOnlyMetric):
+    REQUIRED_PARSER = DejaVu1StateParser
+
+    _TERMINATION_NAMED_REGION = "dialogue_box_area"
+    _TERMINATION_TARGET_NAME = "closed_wallet"
 
 
 # subgoal classes
@@ -101,3 +107,18 @@ class NoActionSelectedInMenuSubGoal(AnyRegionMatchSubGoal):
     NAME = "no_action_selected_in_menu"
     _NAMED_REGIONS = ["action_bar_in_menu"]
     _TARGET_NAMES = ["no_action_selected"]
+
+class InCoatPocketMenuSubGoal(AnyRegionMatchSubGoal):
+    NAME = "in_coat_pocket_menu"
+    _NAMED_REGIONS = ["menu_title_area"]
+    _TARGET_NAMES = ["coat_pocket_menu"]
+
+class InWalletMenuSubGoal(AnyRegionMatchSubGoal):
+    NAME = "in_wallet_menu"
+    _NAMED_REGIONS = ["menu_title_area"]
+    _TARGET_NAMES = ["wallet_menu"]
+
+class InGoodsMenuSubGoal(AnyRegionMatchSubGoal):
+    NAME = "in_goods_menu"
+    _NAMED_REGIONS = ["menu_title_area"]
+    _TARGET_NAMES = ["goods_menu"]

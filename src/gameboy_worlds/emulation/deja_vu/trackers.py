@@ -84,7 +84,7 @@ class DejaVuCoatTestTracker(DejaVuTestTracker):
     SUBGOAL_METRIC = make_subgoal_metric_class([SelectedTakeActionInNormalSubGoal])
 
 class DejaVuTakeGunTestTracker(DejaVuTestTracker):
-    """xs
+    """
     A TestTracker for Deja Vu games that terminates when the agent takes the gun.
     """
 
@@ -97,10 +97,8 @@ class DejaVuOpenDoorTestTracker(DejaVuTestTracker):
     """
 
     TERMINATION_TRUNCATION_METRIC = OpenDoorTerminationMetric
-    SUBGOAL_METRIC = make_subgoal_metric_class([
-        SelectedOpenActionInNormalSubGoal,
-        NoActionSelectedInNormalSubGoal
-    ])
+    SUBGOAL_METRIC = DummySubGoalMetric
+    # make_subgoal_metric_class([SelectedOpenActionInNormalSubGoal, NoActionSelectedInNormalSubGoal])
 
 class DejaVuCloseDoorTestTracker(DejaVuTestTracker):
     """

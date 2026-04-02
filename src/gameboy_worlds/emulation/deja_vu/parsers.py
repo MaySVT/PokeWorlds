@@ -86,6 +86,7 @@ class DejaVuStateParser(StateParser, ABC):
         ("menu_box_area", 0, 70, 160, 70),
         ("action_bar_in_normal", 0, 113, 160, 15),
         ("action_bar_in_menu", 0, 25, 160, 15),
+        ("menu_title_area", 23, 51, 96, 22),
     ]
     """
     List of common multi-target named screen regions for Deja Vu games.
@@ -95,6 +96,7 @@ class DejaVuStateParser(StateParser, ABC):
     - menu_box_area: The area where menu options appear. Can contain multiple targets such as items or actions.
     - action_bar_in_normal: The upper area of the action bar in normal state.
     - action_bar_in_menu: The upper area of the action bar in when menu activated.
+    - menu_title_area: The area where the menu title appears.
     """
 
     COMMON_MULTI_TARGETS = {
@@ -117,6 +119,10 @@ class DejaVuStateParser(StateParser, ABC):
             "selected_open_action",
             "selected_close_action",
         ],
+        "menu_title_area": [
+            "address_menu",
+            "goods_menu",
+        ],
     }
     """
     Common multi-targets for Deja Vu game regions.
@@ -133,6 +139,9 @@ class DejaVuStateParser(StateParser, ABC):
         - selected_take_action: The "Take" action is currently selected in the action bar.
         - selected_open_action: The "Open" action is currently selected in the action bar.
         - selected_close_action: The "Close" action is currently selected in the action bar.
+    - menu_title_area:
+        - address_menu: The address menu is currently open.
+        - goods_menu: The goods menu is currently open.
     """
 
     def __init__(
@@ -281,6 +290,10 @@ class DejaVu1StateParser(DejaVuStateParser):
                 "opened_wallet",
                 "closed_pocket",
                 "closed_wallet",
+            ],
+            "menu_title_area": [
+                "coat_pocket_menu",
+                "wallet_menu",
             ],
         }
 
