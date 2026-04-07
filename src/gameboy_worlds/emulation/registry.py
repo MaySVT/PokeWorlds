@@ -21,7 +21,6 @@ from gameboy_worlds.emulation.parser import StateParser, DummyParser
 from gameboy_worlds.emulation.tracker import StateTracker
 from gameboy_worlds.emulation.emulator import Emulator
 
-<<<<<<< HEAD:src/gameboy_worlds/emulation/registry.py
 from gameboy_worlds.emulation.pokemon import registry as pokemon_registry
 from gameboy_worlds.emulation.legend_of_zelda import (
     registry as legend_of_zelda_registry,
@@ -31,9 +30,7 @@ from gameboy_worlds.emulation.sword_of_hope import registry as sword_of_hope_reg
 from gameboy_worlds.emulation.deja_vu import registry as deja_vu_registry
 from gameboy_worlds.emulation.harvest_moon import registry as harvest_moon_registry
 from gameboy_worlds.emulation.harrypotter import registry as harrypotter_registry
-from gameboy_worlds.emulation.runes_of_virtue import (
-    registry as runes_of_virtue_registry,
-)
+from gameboy_worlds.emulation.bomberman import registry as bomberman_registry
 
 
 _game_registries = [
@@ -44,8 +41,7 @@ _game_registries = [
     deja_vu_registry,
     harvest_moon_registry,
     harrypotter_registry,
-    runes_of_virtue_registry,
-    harrypotter_registry,
+    bomberman_registry,
 ]
 
 _project_parameters = load_parameters()

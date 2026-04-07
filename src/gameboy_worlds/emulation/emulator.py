@@ -820,6 +820,9 @@ class Emulator:
         while True:
             self._parameters = load_parameters()
             if not self._parameters["gameboy_dev_play_stop"]:
+                speed = self._parameters.get("gameboy_headed_emulation_speed", 1)
+                if speed is not None and str(speed).strip().lower() not in ("none", ""):
+                    self._pyboy.set_emulation_speed(int(speed))
                 self._pyboy.tick(1, True)
                 self.state_tracker.step()
             else:
@@ -837,6 +840,7 @@ class Emulator:
                 Enter 'c <region_name> <save_name / None if region.target_path is set>' to capture a named region and save it as a .npy file. To enter a multi-target region use the format "c <region_name>,<target_name> <save_name>" (no spaces in between region and target name)
                 Enter 'd <None / region_name>' to draw a named region and display the current screen with the region drawn.
                 Enter 'b' to enter a breakpoint.
+                Enter 'g <code>' to apply a GameShark code (e.g. g 0101C7C9).
                 Valid region names are: {valid_regions}
                 Initially unassigned regions (target array not set) were: {unassigned_regions}\n\t Note: This list does not update as you assign targets during this session.
                 Current State: 
@@ -847,7 +851,7 @@ class Emulator:
                 user_input = input("Dev mode input: ")
                 user_input = user_input.lower().strip()
                 first_char = user_input[0] if len(user_input) > 0 else ""
-                allowed_inputs = ["e", "", "p", "w", "c", "s", "l", "d", "b"]
+                allowed_inputs = ["e", "", "p", "w", "c", "s", "l", "d", "b", "g"]
                 if first_char not in allowed_inputs:
                     log_warn(
                         f"Invalid input {user_input}. Valid inputs are: {allowed_inputs}",
@@ -905,6 +909,15 @@ class Emulator:
                         current_frame=self.get_current_frame(), y_offset=0
                     )
                     breakpoint()
+                elif first_char == "g":
+                    parts = user_input.split(" ")
+                    if len(parts) != 2:
+                        log_warn(f"Invalid input {user_input}. Usage: g <code>", self._parameters)
+                    else:
+                        code = parts[1].upper()
+                        self._pyboy.gameshark.add(code)
+                        log_info(f"GameShark code applied: {code}", self._parameters)
+                    continue
                 else:
                     current_frame = self.get_current_frame()
                     # draw it even if c, so we can see what we're capturing
