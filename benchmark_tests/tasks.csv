@@ -14,3 +14,7 @@ pokemon_red,menu,Use a Potion on Charmander,location_pewter_city_starting_charma
 pokemon_red,"navigation, menu, interaction",Buy a Potion,location_pewter_pokemart_starting_charmander,bought_potion_at_pewter_pokemart_test,,"pokemon_crystal, pokemon_brown, pokemon_starbeasts, pokemon_fools_gold, pokemon_prism"
 sword_of_hope_1,navigation,Reach the first adjacent room from the start state,navigation_old_house,mill_room_test,,sword_of_hope_2
 sword_of_hope_1,navigation,Navigate from the Old Man's Room to the Shaman's Room,navigation_old_house,shaman_room_test,,sword_of_hope_2
+sword_of_hope_1,dialogue,Clear the active dialogue box and return control to the player,dialogue_example,dialogue_clear_test,,sword_of_hope_2
+sword_of_hope_1,combat,Finish a battle encounter without a game over,battle_example,battle_won_test,,sword_of_hope_2
+sword_of_hope_1,interaction,Look at an object in the environment to discover a hidden item,overworld_safe,look_item_test,,sword_of_hope_2
+sword_of_hope_1,"menu, interaction",Buy equipment or supplies from a shop,shop_forest,buy_item_test,,sword_of_hope_2
