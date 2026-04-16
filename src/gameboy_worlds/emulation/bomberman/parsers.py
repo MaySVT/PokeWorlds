@@ -118,9 +118,6 @@ class BombermanPocketParser(BombermanParser):
         "area_intro_strip": [
             "area_intro_forest",
             "area_intro_ocean",
-            "area_intro_wind",
-            "area_intro_cloud",
-            "area_intro_evil",
             "world_clear",
             "game_over",
             "jump_level_select",
@@ -155,15 +152,6 @@ class BombermanPocketParser(BombermanParser):
     def is_area_intro_ocean(self, current_screen: np.ndarray) -> bool:
         return self._matches(current_screen, "area_intro_strip", "area_intro_ocean")
 
-    def is_area_intro_wind(self, current_screen: np.ndarray) -> bool:
-        return self._matches(current_screen, "area_intro_strip", "area_intro_wind")
-
-    def is_area_intro_cloud(self, current_screen: np.ndarray) -> bool:
-        return self._matches(current_screen, "area_intro_strip", "area_intro_cloud")
-
-    def is_area_intro_evil(self, current_screen: np.ndarray) -> bool:
-        return self._matches(current_screen, "area_intro_strip", "area_intro_evil")
-
     def is_in_forest_world(self, current_screen: np.ndarray) -> bool:
         return self._matches(current_screen, "zone_background", "in_forest_world")
 
@@ -183,9 +171,6 @@ class BombermanPocketParser(BombermanParser):
         return (
             self.is_area_intro_forest(current_screen)
             or self.is_area_intro_ocean(current_screen)
-            or self.is_area_intro_wind(current_screen)
-            or self.is_area_intro_cloud(current_screen)
-            or self.is_area_intro_evil(current_screen)
         )
 
 

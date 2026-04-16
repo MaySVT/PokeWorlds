@@ -82,24 +82,6 @@ class OceanAreaIntroTerminateMetric(RegionMatchTerminationMetric, TerminationMet
     _TERMINATION_TARGET_NAME = "area_intro_ocean"
 
 
-class WindAreaIntroTerminateMetric(RegionMatchTerminationMetric, TerminationMetric):
-    REQUIRED_PARSER = BombermanPocketParser
-    _TERMINATION_NAMED_REGION = "area_intro_strip"
-    _TERMINATION_TARGET_NAME = "area_intro_wind"
-
-
-class CloudAreaIntroTerminateMetric(RegionMatchTerminationMetric, TerminationMetric):
-    REQUIRED_PARSER = BombermanPocketParser
-    _TERMINATION_NAMED_REGION = "area_intro_strip"
-    _TERMINATION_TARGET_NAME = "area_intro_cloud"
-
-
-class EvilAreaIntroTerminateMetric(RegionMatchTerminationMetric, TerminationMetric):
-    REQUIRED_PARSER = BombermanPocketParser
-    _TERMINATION_NAMED_REGION = "area_intro_strip"
-    _TERMINATION_TARGET_NAME = "area_intro_evil"
-
-
 class WorldClearTerminateMetric(RegionMatchTerminationMetric, TerminationMetric):
     REQUIRED_PARSER = BombermanPocketParser
     _TERMINATION_NAMED_REGION = "area_intro_strip"
