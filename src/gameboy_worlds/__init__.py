@@ -20,6 +20,7 @@ There are two ways to navigate the documentation:
 
 ### Notable API Imports
 **Utils Submodule:**
+* `get_benchmark_tasks`: Function to get benchmark tasks for evaluating agents in different game variants.
 * `get_benchmark_tasks_dfs`: Function to get benchmark tasks for evaluating agents in different game variants.
 
 **Emulation Submodule:**
@@ -37,7 +38,7 @@ There are two ways to navigate the documentation:
 
 """
 
-from gameboy_worlds.utils import get_benchmark_tasks_dfs
+from gameboy_worlds.utils import get_benchmark_tasks_dfs, get_benchmark_tasks
 
 from gameboy_worlds.emulation.registry import (
     AVAILABLE_GAMES,
