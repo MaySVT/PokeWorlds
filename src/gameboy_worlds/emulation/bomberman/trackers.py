@@ -1,7 +1,10 @@
 from gameboy_worlds.emulation.bomberman.base_metrics import (
     BombermanMaxCoreMetrics,
+    BombermanMaxOCRMetric,
     BombermanPocketCoreMetrics,
+    BombermanPocketOCRMetric,
     BombermanQuestCoreMetrics,
+    BombermanQuestOCRMetric,
 )
 from gameboy_worlds.emulation.bomberman.test_metrics import (
     BattleActiveTerminateMetric,
@@ -67,7 +70,13 @@ class BombermanMaxTracker(BombermanTracker):
     CORE_METRIC_CLASS = BombermanMaxCoreMetrics
 
 
-class BombermanMaxBaseTestTracker(BombermanBaseTestTracker, BombermanMaxTracker):
+class BombermanMaxOCRTracker(BombermanMaxTracker):
+    def start(self):
+        super().start()
+        self.metric_classes.extend([BombermanMaxOCRMetric])
+
+
+class BombermanMaxBaseTestTracker(BombermanBaseTestTracker, BombermanMaxOCRTracker):
     pass
 
 
@@ -111,7 +120,13 @@ class BombermanPocketTracker(BombermanTracker):
     CORE_METRIC_CLASS = BombermanPocketCoreMetrics
 
 
-class BombermanPocketBaseTestTracker(BombermanBaseTestTracker, BombermanPocketTracker):
+class BombermanPocketOCRTracker(BombermanPocketTracker):
+    def start(self):
+        super().start()
+        self.metric_classes.extend([BombermanPocketOCRMetric])
+
+
+class BombermanPocketBaseTestTracker(BombermanBaseTestTracker, BombermanPocketOCRTracker):
     pass
 
 
@@ -177,7 +192,13 @@ class BombermanQuestTracker(BombermanTracker):
     CORE_METRIC_CLASS = BombermanQuestCoreMetrics
 
 
-class BombermanQuestBaseTestTracker(BombermanBaseTestTracker, BombermanQuestTracker):
+class BombermanQuestOCRTracker(BombermanQuestTracker):
+    def start(self):
+        super().start()
+        self.metric_classes.extend([BombermanQuestOCRMetric])
+
+
+class BombermanQuestBaseTestTracker(BombermanBaseTestTracker, BombermanQuestOCRTracker):
     pass
 
 

@@ -55,7 +55,8 @@ class BombermanMaxParser(BombermanParser):
 
     MULTI_TARGET_REGIONS = [
         ("screen_top", 0, 0, 160, 16),
-        ("stage_briefing_strip", 0, 84, 160, 8),
+        ("stage_briefing_strip", 0, 87, 43, 41),
+        ("stage_briefing_box", 0, 72, 160, 56),
         ("hud_enemy_count", 110, 136, 17, 8),
         ("hud_bomb_count", 127, 136, 15, 8),
         ("hud_fire", 142, 136, 18, 8),
@@ -178,6 +179,15 @@ class BombermanPocketParser(BombermanParser):
     def is_in_evil_world(self, current_screen: np.ndarray) -> bool:
         return self._matches(current_screen, "zone_background", "in_evil_world")
 
+    def is_in_any_area_intro(self, current_screen: np.ndarray) -> bool:
+        return (
+            self.is_area_intro_forest(current_screen)
+            or self.is_area_intro_ocean(current_screen)
+            or self.is_area_intro_wind(current_screen)
+            or self.is_area_intro_cloud(current_screen)
+            or self.is_area_intro_evil(current_screen)
+        )
+
 
 class BombermanQuestParser(BombermanParser):
     VARIANT = "bomberman_quest"
@@ -185,6 +195,7 @@ class BombermanQuestParser(BombermanParser):
     MULTI_TARGET_REGIONS = [
         ("screen_top", 0, 0, 160, 16),
         ("dialogue_strip", 0, 12, 160, 10),
+        ("dialogue_box", 0, 12, 160, 60),
         ("dialogue_icon", 124, 30, 31, 27),
         ("hud_bottom", 47, 136, 33, 8),
         ("item_select_panel", 95, 5, 65, 85),
