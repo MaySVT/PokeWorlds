@@ -342,13 +342,9 @@ class Controller(ABC):
         raise NotImplementedError
 
 
-class LowLevelController(Controller):
-    """A controller that executes low level actions directly on the emulator."""
-
-    ACTIONS = [LowLevelAction]
-    """ A HighLevelAction subclass that directly maps to low level actions. """
-
-    STRING_MAPPER = {
+def parse_button_string(input_str: str) -> Optional[LowLevelActions]:
+    string_low = input_str.lower().strip().strip("(").strip(")").replace("_", " ")
+    mapper = {
         "a": LowLevelActions.PRESS_BUTTON_A,
         "up": LowLevelActions.PRESS_ARROW_UP,
         "b": LowLevelActions.PRESS_BUTTON_B,
@@ -361,16 +357,35 @@ class LowLevelController(Controller):
         "l": LowLevelActions.PRESS_ARROW_LEFT,
         "r": LowLevelActions.PRESS_ARROW_RIGHT,
         "s": LowLevelActions.PRESS_BUTTON_START,
-        # "select": LowLevelActions.PRESS_BUTTON_SELECT,
     }
+    for map_opt in mapper:
+        if string_low == map_opt:
+            return mapper[map_opt]
+    if "move" in string_low:
+        directions_in_string = []
+        for dir_opt in ["up", "down", "left", "right"]:
+            if dir_opt in string_low:
+                directions_in_string.append(dir_opt)
+        if len(directions_in_string) == 1:
+            return mapper[directions_in_string[0]]
+    if "press" in string_low:
+        buttons_in_string = []
+        for button_opt in ["a", "b", "start"]:
+            if button_opt in string_low:
+                buttons_in_string.append(button_opt)
+        if len(buttons_in_string) == 1:
+            return mapper[buttons_in_string[0]]
+    return None
+
+
+class LowLevelController(Controller):
+    """A controller that executes low level actions directly on the emulator."""
+
+    ACTIONS = [LowLevelAction]
+    """ A HighLevelAction subclass that directly maps to low level actions. """
 
     def string_to_high_level_action(self, input_str):
-        string_low = input_str.lower().strip().strip("(").strip(")")
-        low_level_action = None
-        for map_opt in self.STRING_MAPPER:
-            if string_low == map_opt:
-                low_level_action = self.STRING_MAPPER[map_opt]
-                break
+        low_level_action = parse_button_string(input_str)
         if low_level_action is None:
             return None, None
         return LowLevelAction, {"low_level_action": low_level_action}
@@ -389,24 +404,7 @@ class LowLevelPlayController(Controller):
     """ A HighLevelAction subclass that directly maps to low level actions, but no menu button presses. """
 
     def string_to_high_level_action(self, input_str):
-        string_low = input_str.lower().strip().strip("(").strip(")")
-        low_level_action = None
-        mapper = {
-            "a": LowLevelActions.PRESS_BUTTON_A,
-            "up": LowLevelActions.PRESS_ARROW_UP,
-            "b": LowLevelActions.PRESS_BUTTON_B,
-            "down": LowLevelActions.PRESS_ARROW_DOWN,
-            "left": LowLevelActions.PRESS_ARROW_LEFT,
-            "right": LowLevelActions.PRESS_ARROW_RIGHT,
-            "u": LowLevelActions.PRESS_ARROW_UP,
-            "d": LowLevelActions.PRESS_ARROW_DOWN,
-            "l": LowLevelActions.PRESS_ARROW_LEFT,
-            "r": LowLevelActions.PRESS_ARROW_RIGHT,
-        }
-        for map_opt in mapper:
-            if string_low == map_opt:
-                low_level_action = mapper[map_opt]
-                break
+        low_level_action = parse_button_string(input_str)
         if low_level_action is None:
             return None, None
         return LowLevelPlayAction, {"low_level_action": low_level_action}
