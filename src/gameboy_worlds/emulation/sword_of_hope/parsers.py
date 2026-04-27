@@ -154,19 +154,9 @@ class SwordOfHope2Parser(_BaseSwordOfHopeParser):
     VARIANT = "sword_of_hope_2"
 
     COMMON_MULTI_TARGETS = {
-        "room_label": [
-            "castle_throne",
-            "castle_corridor",
-            "riccar_woods",
-        ],
-        "command_area": [
-            "exploration_menu",
-            "menu_open",
-        ],
         "status_command": [
             "dialogue_active",
             "dialogue_cleared",
-            "dialogue_visible",
             "dialogue_initiated",
             "dialogue_advanced",
         ],
